@@ -1,16 +1,13 @@
-import type { StorybookConfig } from "@storybook/react-vite";
+// .storybook/main.ts
+import type { StorybookConfig } from '@storybook/react-vite';
 
 const config: StorybookConfig = {
-  stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|jsx|ts|tsx)"],
-  staticDirs: ["../public"],
+  framework: { name: '@storybook/react-vite', options: {} },
+  stories: ['../src/**/*.stories.@(ts|tsx|mdx)'],
   addons: [
-    "@storybook/addon-docs",
-    "@storybook/addon-vitest",
-    "@chromatic-com/storybook"
+    '@storybook/addon-essentials', // includes actions/controls; keep it
+    '@storybook/addon-docs',       // ensure docs tab is available
   ],
-  framework: {
-    name: "@storybook/react-vite",
-    options: {},
-  },
+   // turn on autodocs globally
 };
 export default config;
