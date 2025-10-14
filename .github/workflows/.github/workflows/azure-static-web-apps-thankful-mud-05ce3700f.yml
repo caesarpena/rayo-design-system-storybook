@@ -1,37 +1,38 @@
-# .github/workflows/azure-static-web-apps.yml
-name: Azure Static Web Apps CI/CD
+name: Azure Static Web Apps CI/CD (Storybook)
 
 on:
   push:
-    branches:
-      - master   # or main, match your default branch
+    branches: [ master ]   # change if your default branch is different
   workflow_dispatch:
 
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout (with LFS)
         uses: actions/checkout@v4
+        with:
+          lfs: true
 
-      - name: Setup Node
+      - name: Setup Node + Yarn 4
         uses: actions/setup-node@v4
         with:
           node-version: 20
+      - run: corepack enable && corepack prepare yarn@4.9.2 --activate
 
       - name: Install deps
-        run: npm ci
+        run: yarn install --immutable
 
       - name: Build Storybook
-        # Storybook 7+: `npx storybook build` also works
-        run: npm run build-storybook
+        run: yarn build-storybook --output-dir storybook-static
 
       - name: Deploy to Azure Static Web Apps
         uses: Azure/static-web-apps-deploy@v1
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
-          # We already built, so skip Oryx and just deploy the artifacts:
+          action: upload
+          # We already built → point directly to the built folder and skip Oryx
+          app_location: storybook-static
           skip_app_build: true
-          app_location: "/"                      # repo root (doesn't matter when skipping build)
-          app_artifact_location: "storybook-static"  # <-- where Storybook outputs index.html
-          production_branch: "master"            # match your default branch
+          output_location: ""     # leave empty when skipping the build
+          production_branch: master
