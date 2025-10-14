@@ -2,7 +2,9 @@ name: Azure Static Web Apps CI/CD
 
 on:
   push:
-    branches: [ master ]   # <-- change if your default branch is different
+    branches:
+      - master
+      - main
   workflow_dispatch:
 
 jobs:
@@ -14,18 +16,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      # Deploy & build Storybook inside the action
       - name: Deploy to Azure Static Web Apps (Storybook)
         uses: Azure/static-web-apps-deploy@v1
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           action: upload
-          # Build at repo root
           app_location: /
-          # Your requested command:
           app_build_command: npm ci && npm run build-storybook
-          # Where Storybook outputs index.html
           output_location: storybook-static
-          # Avoid SWA trying to detect/build API or DB
           skip_api_build: true
           data_api_location: ""
