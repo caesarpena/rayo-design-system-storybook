@@ -1,6 +1,6 @@
 <p align="center">
-  <a href="https://www.chromatic.com/">
-    <img alt="Chromatic" src="https://avatars2.githubusercontent.com/u/24584319?s=200&v=4" width="60" />
+  <a href="https://caesarpena.com/">
+    <img alt="Chromatic" src="https://avatars2.githubusercontent.com/u/24584319?s=200&v=4](https://caesarpena.com/wp-content/uploads/2018/01/caesarpena-logo.png" width="60" />
   </a>
 </p>
 
@@ -8,106 +8,230 @@
   Chromatic's Intro to Storybook React template
 </h1>
 
-This template ships with the main React and Storybook configuration files you'll need to get up and running fast.
+# RAYO Design System — Storybook (React host for Lit Web Components)
 
-## 🚅 Quick start
+This repo hosts **Storybook** for the `rayo-ux-web-design-system` package. It renders Lit **Web Components** inside Storybook’s **React** runtime via `@lit/react`, exposes **Controls/Actions** for props & events, and documents usage patterns with live examples.
 
-1.  **Create the application.**
+> The components themselves live in the npm package `rayo-ux-web-design-system` (framework‑agnostic, themable via CSS variables). This repo focuses on docs, demos, and developer ergonomics.
 
-    Use [degit](https://github.com/Rich-Harris/degit) to get this template.
+---
 
-    ```shell
-    # Clone the template
-    npx degit chromaui/intro-storybook-react-template taskbox
-    ```
+## 🚀 Quick start
 
-1.  **Install the dependencies.**
+```bash
+# 1) Clone
+git clone <your-repo-url>
+cd rayo-design-system-storybook
 
-    Navigate into your new site’s directory and install the necessary dependencies.
+# 2) Install deps
+# (Choose one)
+pnpm i
+# or
+yarn
+# or
+npm i
 
-    ```shell
-    # Navigate to the directory
-    cd taskbox/
+# 3) Ensure the DS package is available
+# If published: it will be installed from npm as a dep.
+# If developing locally alongside the library, see "Developing against a local build" below.
 
-    # Install the dependencies
-    yarn
-    ```
+# 4) Run Storybook
+pnpm storybook   # or: yarn storybook / npm run storybook
+# -> http://localhost:6006
+```
 
-1.  **Open the source code and start editing!**
+### Developing against a local build (no publish required)
 
-    Open the `taskbox` directory in your code editor of choice and building your first component!
+When iterating on the library and Storybook together:
 
-1.  **Browse your stories!**
+- **Workspaces (recommended):** keep the storybook and DS package in a monorepo, declare them in the same workspace, and use `link:` or `workspace:` protocol.
+- **Pack & install:** from the DS repo run `npm pack` to produce a `.tgz`, then in this repo: `npm i ../path/to/rayo-ux-web-design-system-x.y.z.tgz`.
+- **yalc (alt):** `yalc publish` in DS → `yalc add rayo-ux-web-design-system` here.
 
-    Run `yarn storybook` to see your component's stories at `http://localhost:6006`
+> Tip: if custom elements fail to render, confirm the DS package is actually imported (see “How this works” below).
 
-## 🔎 What's inside?
+---
 
-A quick look at the top-level files and directories included with this template.
+## 🧩 How this works
 
-    .
-    ├── .storybook
-    ├── .yarn
-    ├── node_modules
-    ├── public
-    ├── src
-    ├── .eslintrc.cjs
-    ├── .gitignore
-    ├── .yarnrc.yml
-    ├── index.html
-    ├── LICENSE
-    ├── package.json
-    ├── tsconfig.app.json
-    ├── tsconfig.json
-    ├── tsconfig.node.json
-    ├── yarn.lock
-    ├── vite.config.ts
-    ├── vitest.shims.d.ts
-    └── README.md
+- **Lit Web Components** are registered by importing the library (e.g., `import { RayoButtonComponent } from 'rayo-ux-web-design-system/all'`).
+- **React wrapper**: Storybook runs on React. We bridge a custom element to React with `createComponent` from `@lit/react`, so Controls/Actions work as expected.
+- **Theming**: Components read **CSS variable tokens** (RGB triplets) like `--color-accent-600`. Stories can switch themes by overriding tokens in `preview.css` or per‑story decorators.
 
-1.  **`.storybook`**: This directory contains Storybook's [configuration](https://storybook.js.org/docs/configure) files.
+```ts
+// Example wrapper (from stories)
+import * as React from 'react';
+import { createComponent } from '@lit/react';
+import { RayoButtonComponent } from 'rayo-ux-web-design-system/all';
 
-2.  **`.yarn`**: This directory contains the configuration files for Yarn including the cache and the global packages.
+export const RayoButton = createComponent({
+  tagName: 'rayo-button',
+  elementClass: RayoButtonComponent,
+  react: React,
+  events: { onClick: 'onClick' }, // map CustomEvents -> Storybook Actions
+});
+```
 
-3.  **`node_modules`**: This directory contains all of the modules of code that your project depends on (npm packages).
+---
 
-4.  **`public`**: This directory will contain the development and production build of the site.
+## 📦 What’s in this repo
 
-5.  **`src`**: This directory will contain all of the code related to what you will see on your application.
+```
+.
+├── .storybook/           # Storybook config (vite, addons, preview globals)
+├── public/               # Static assets for stories
+├── src/stories/          # Stories for Rayo components (React wrappers)
+│   ├── RayoBadge.stories.tsx
+│   ├── RayoButton.stories.tsx
+│   ├── RayoIcon.stories.tsx
+│   └── RayoText.stories.tsx
+├── package.json
+├── tsconfig*.json
+├── vite.config.ts
+└── README.md
+```
 
-6.  **`eslintrc.cjs`**: This file is the configuration file for [ESLint](https://eslint.org/).
+---
 
-7.  **`.gitignore`**: This file tells git which files it should not track or maintain during the development process of your project.
+## 🧪 Story patterns used here
 
-8.  **`.yarnrc.yml`**: This file contains the configuration for Yarn. It's used to define the project's settings, such as caching and other settings.
+- **Args/Controls** for size/color enums:
 
-9.  **`index.html`**: This is the HTML page that is served when generating a development or production build.
+```ts
+import { sizes } from 'rayo-ux-web-design-system/enums/sizes';
+import { colors } from 'rayo-ux-web-design-system/enums/colors';
 
-10. **`LICENSE`**: The template is licensed under the MIT licence.
+const sizeOptions = ['', ...Object.values(sizes)];
+const colorOptions = ['', ...Object.values(colors)];
 
-11. **`package.json`**: Standard manifest file for Node.js projects, which typically includes project specific metadata (such as the project's name, the author among other information). It's based on this file that npm will know which packages are necessary to the project.
+argTypes: {
+  size: { control: 'select', options: sizeOptions },
+  badgeColor: { control: 'select', options: colorOptions },
+}
+```
 
-12. **`tsconfig.app.json`**: This file contains the TypeScript compiler options for the project.
+- **Icon control with mapping** (for `@mdi/js` path data):
 
-13. **`tsconfig.json`**: This file is the root TypeScript configuration file that specifies the root files and the compiler options required to compile the project.
+```ts
+import { mdiHome, mdiArrowRight } from '@mdi/js';
+const mdiIconSet = { None: '', Home: mdiHome, 'Arrow Right': mdiArrowRight };
 
-14. **`tsconfig.json`**: This file is the root TypeScript configuration file that specifies the root files and the compiler options that could be extended by other configuration files in the project.
+argTypes: {
+  icon: { control: 'select', options: Object.keys(mdiIconSet), mapping: mdiIconSet }
+}
+```
 
-15. **`tsconfig.node.json`**: This file contains the TypeScript compiler options required to manage the Node.js environment in the project configuration files. Used to help distinguish between configurations for different parts of the project.
+- **Actions** for component events:
 
-16. **`vite.config.ts`**: This is the configuration file for [Vite](https://vitejs.dev/), a build tool that aims to provide a faster and leaner development experience for modern web projects.
+```ts
+events: { onClick: 'onClick', onFocus: 'onFocus' } // in createComponent
+argTypes: { onClick: { action: 'clicked' } }       // in meta
+```
 
-17. **`vitest.shims.d.ts`**: This file contains TypeScript type definitions and shims that ensure proper type support for Vitest when integrated with Storybook's test addon. It provides necessary global types and resolves compatibility issues between the testing frameworks.
+---
 
-18. **`yarn.lock`**: This is an automatically generated file based on the exact versions of your npm dependencies that were installed for your project. **(Do not change it manually).**
+## 🎨 Theming in stories
 
-19. **`README.md`**: A text file containing useful reference information about the project.
+RAYO ships color/size tokens as **CSS variables** (RGB format). You can tweak them globally for the docs site:
 
-## Contribute
+```css
+/* .storybook/preview.css */
+:root {
+  --color-accent-600: 219, 39, 119; /* example brand accent */
+}
+html[data-theme="dark"] {
+  --color-neutral-900: 17, 24, 39;
+  --color-white: 255, 255, 255;
+}
+```
 
-If you encounter an issue with the template, we encourage you to open an issue in this template's repository.
+Or per story via a decorator:
 
-## Learning Storybook
+```ts
+export const decorators = [
+  (Story) => {
+    const style = document.documentElement.style;
+    style.setProperty('--color-accent-600', '219,39,119');
+    return <Story />;
+  }
+];
+```
 
-1. Read our introductory tutorial at [Learn Storybook](https://storybook.js.org/tutorials/intro-to-storybook/react/en/get-started/).
-2. See our official documentation at [Storybook](https://storybook.js.org/).
+---
+
+## 🗺️ Example stories included
+
+- **`RayoBadge.stories.tsx`**  
+  Demonstrates numeric capping (`value` + `maxValue` → “99+”), size control (`sizes` enum), and `badgeColor` token select.
+
+- **`RayoButton.stories.tsx`**  
+  Appearance variants (`solid/accent/quiet/outline/danger/link`), icon placement, disabled state, and event actions.
+
+- **`RayoIcon.stories.tsx`**  
+  `size` (px) vs CSS-driven sizing, `opacity`, and token-driven fill (`color`/`fillColor`).
+
+- **`RayoText.stories.tsx`**  
+  Typographic presets (`appearance × size`) with semantic tag switching and optional leading icon.
+
+---
+
+## 🧰 Scripts
+
+Add/adjust as needed in `package.json`:
+
+```json
+{
+  "scripts": {
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "lint": "eslint . --ext .ts,.tsx",
+    "typecheck": "tsc --noEmit",
+    "test": "storybook test"
+  }
+}
+```
+
+---
+
+## ⚙️ Tooling
+
+- **Runtime:** Storybook on React + Vite (`@storybook/react-vite`)
+- **Bridge:** `@lit/react` (wraps Lit custom elements for React Controls/Actions)
+- **Icons:** `@mdi/js` (path data mapped to the `icon` prop)
+- **Types:** TypeScript
+- **Build:** Vite
+- **Optional addons:** `@storybook/addon-essentials`, `@storybook/addon-a11y`, `@storybook/addon-interactions`, `@storybook/test`
+
+---
+
+## 🧩 Troubleshooting
+
+- **“Element not defined” / blank canvas** → Make sure you import from `rayo-ux-web-design-system/all` in each story (this registers the custom elements).
+- **Props not changing** → Verify the prop is declared with Lit’s `@property` and reflected/consumed correctly; check the story’s `argTypes` key names match the component’s property names (`badgeColor` vs `badge-color`).
+- **Events not firing in Actions** → Ensure the custom event names in `createComponent({ events: {...} })` match the component’s `dispatchEvent(new CustomEvent('...'))` names.
+- **Styling tokens not applied** → Confirm your CSS variable overrides are set at `:root` or a container that contains the story iframe.
+
+---
+
+## 📄 License
+
+MIT (for the docs in this repo). The component library’s license is defined in its own package.
+
+---
+
+### Appendix: Minimal usage examples
+
+```tsx
+// Button (React story)
+export const Primary = {
+  args: { appearance: 'solid', text: 'Save', icon: 'Arrow Right', iconPlacement: 'right' }
+};
+```
+
+```tsx
+// Badge (React story)
+export const Capped = {
+  args: { value: 120, maxValue: 99, size: 'md', badgeColor: 'accent' }
+};
+```
+
