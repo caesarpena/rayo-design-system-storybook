@@ -5,10 +5,8 @@
 </p>
 
 <h1 align="center">
-  Chromatic's Intro to Storybook React template
+  RAYO Design System — Storybook (React host for Lit Web Components)
 </h1>
-
-# RAYO Design System — Storybook (React host for Lit Web Components)
 
 This repo hosts **Storybook** for the `rayo-ux-web-design-system` package. It renders Lit **Web Components** inside Storybook’s **React** runtime via `@lit/react`, exposes **Controls/Actions** for props & events, and documents usage patterns with live examples.
 
