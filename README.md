@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://caesarpena.com/">
-    <img alt="Chromatic" src="https://avatars2.githubusercontent.com/u/24584319?s=200&v=4](https://caesarpena.com/wp-content/uploads/2018/01/caesarpena-logo.png" width="60" />
+    <img alt="Chromatic" src="https://caesarpena.com/wp-content/uploads/2018/01/caesarpena-logo.png" width="60" />
   </a>
 </p>
 
