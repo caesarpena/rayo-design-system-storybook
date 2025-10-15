@@ -5,7 +5,7 @@
 </p>
 
 <h1 align="center">
-  RAYO Design System — <a href="https://thankful-mud-05ce3700f.1.azurestaticapps.net/">Storybook (React host for Lit Web Components)</a>
+  RAYO Design System — <a href="https://thankful-mud-05ce3700f.1.azurestaticapps.net/" target="_blank" rel="noopener noreferrer">Storybook (React host for Lit Web Components)</a>
 </h1>
 
 This repo hosts **Storybook** for the `rayo-ux-web-design-system` package. It renders Lit **Web Components** inside Storybook’s **React** runtime via `@lit/react`, exposes **Controls/Actions** for props & events, and documents usage patterns with live examples.
