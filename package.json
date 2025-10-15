@@ -17,7 +17,7 @@
     "@lit/react": "^1.0.8",
     "@mdi/js": "^7.4.47",
     "@storybook/web-components": "^9.1.10",
-    "rayo-ux-web-design-system": "file:./packages/rayo-ux-web-design-system-1.17.0.tgz",
+    "rayo-ux-web-design-system": "file:./packages/rayo-ux-web-design-system-1.18.0.tgz",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

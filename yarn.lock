@@ -2879,10 +2879,10 @@ queue-microtask@^1.2.2:
   resolved "https://registry.npmjs.org/queue-microtask/-/queue-microtask-1.2.3.tgz"
   integrity sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==
 
-"rayo-ux-web-design-system@file:./packages/rayo-ux-web-design-system-1.17.0.tgz":
-  version "1.17.0"
-  resolved "file:packages/rayo-ux-web-design-system-1.17.0.tgz"
-  integrity sha512-fF2fImhMZSTDUOkO/yKVGXmrKC4fDomMhnkVPY+UYFARmPrOygRHcflSXJfMdCE24ZSd/Hll0LJtm7o8Y0PIeg==
+"rayo-ux-web-design-system@file:./packages/rayo-ux-web-design-system-1.18.0.tgz":
+  version "1.18.0"
+  resolved "file:packages/rayo-ux-web-design-system-1.18.0.tgz"
+  integrity sha512-cW2AQaBgH8i9NlSMwLhCmBXYpbdiKG4rmLtXm/loEA/7EbBvCZUP2k2P2JgP0MS6sXr0WzlKCd35JvwghGoYPA==
   dependencies:
     "@mdi/js" "^7.4.47"
     flag-icons "^7.2.3"
